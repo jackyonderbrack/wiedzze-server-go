@@ -1,11 +1,15 @@
 package routes
 
-import "net/http"
+import (
+	"net/http"
+	"wiedzze_server_go/src/controllers"
 
-func UserRouter() {
-	http.HandleFunc("/users", usersHandler)
-}
+	"go.mongodb.org/mongo-driver/mongo"
+)
 
-func usersHandler(w http.ResponseWriter, r *http.Request) {
-	
+// UserRouter funkcja inicjalizująca routing dla użytkowników.
+func UserRouter(client *mongo.Client) {
+	// Rejestrujemy handler CreateUser dla ścieżki "/users/create".
+	// Przekazujemy klienta bazy danych do funkcji CreateUser, aby mogła ona używać tego klienta wewnątrz handlera.
+	http.HandleFunc("/users/create", controllers.CreateUser(client))
 }
