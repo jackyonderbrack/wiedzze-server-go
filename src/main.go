@@ -2,9 +2,15 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"log"
+	"net/http"
 	"wiedzze_server_go/src/config"
 )
+
+type healthcheckResponse struct {
+	Message string `json:"message"`
+}
 
 func main() {
 	// ładujemy zmienne środowiskowe
@@ -31,4 +37,19 @@ func main() {
 	}()
 
 	// od teraz można używać zmiennej 'client' do interakcji z bazą danych
+
+	// pobieramy port z config.go
+	port := config.GetPort()
+	// Healthckeck
+	http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+		response := healthcheckResponse{Message: "pong"}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+	})
+
+	// Uwaga: Użyj log.Fatal zamiast log.Panicf do uruchomienia serwera
+	log.Printf("Uruchamianie serwera na porcie %s\n", port)
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
+		log.Fatal("Błąd podczas uruchamiania serwera: ", err)
+	}
 }
