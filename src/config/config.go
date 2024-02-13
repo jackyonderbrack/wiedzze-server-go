@@ -16,7 +16,7 @@ func LoadEnv() {
 		panic("Nie udało się znaleźć plików environmentu")
 	}
 }
-// ładujemy zmienną
+// Pobieramy zmienną środowiskową MomgoURI z .env
 func GetMongoURI() string {
 	return os.Getenv("MongoURI")
 }
@@ -41,6 +41,7 @@ func InitMongoClient(mongoURI string) (*mongo.Client, error) {
 	return client, nil
 }
 
+// pobieramy zzmienną srodowiskową PORT z .env
 func GetPort() string {
 	port:=os.Getenv("PORT")
 	if port == "" {
